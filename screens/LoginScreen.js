@@ -6,12 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { Button, ButtonAlt } from "../components/Buttons";
 import React from "react";
-import { FIREBASE_AUTH, auth } from "../firebase";
+import { auth } from "../firebase";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth, logout } from "../AuthContext";
 import {
-  signInUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 const LoginScreen = () => {
@@ -19,32 +21,47 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-  const auth = FIREBASE_AUTH;
-
+  const { user, setUser, isLoggedIn, setLogged } = useAuth();
   useEffect(() => {
     setLoading(true);
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
+      if (user && !loading) {
+        setLogged(true);
+        setUser(user);
+        setEmail("");
+        setPassword("");
         navigation.navigate("Home");
+      } else {
+        console.log("loading");
       }
+      setLoading(false);
     });
+
     return unsubscribe;
   }, []);
 
   const handleSignUp = async () => {
     setLoading(true);
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      setLoading(false);
+    if (email != null && password != null) {
+      try {
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        await signInWithEmailAndPassword(auth, email, password);
+        alert(user.email + "signed up");
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
   const handleLogin = async () => {
     setLoading(true);
     try {
-      await signInUserWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       alert(error.message);
     } finally {
@@ -70,29 +87,20 @@ const LoginScreen = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+          <Button
             onPress={() => {
               handleLogin();
-              setEmail("");
-              setPassword("");
             }}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}> Login </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
+            title="Login"
+          />
+          <ButtonAlt
             onPress={() => {
               handleSignUp();
               setEmail("");
               setPassword("");
             }}
-            style={[styles.button, styles.buttonAlt]}
-          >
-            <Text style={[styles.buttonText, styles.buttonAltText]}>
-              Register
-            </Text>
-          </TouchableOpacity>
+            title="Register"
+          />
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -113,8 +121,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     alignItems: "center",
     alignSelf: "center", // Align to the start of the container
-    paddingHorizontal: 10, // Adjust as needed
-    paddingVertical: 10, // Adjust as needed
+    padding: 10, // Adjust as needed
     width: 200,
     borderRadius: 10,
   },
@@ -130,7 +137,6 @@ const styles = StyleSheet.create({
     width: "80%",
     borderColor: "gray",
     borderWidth: 1,
-    marginBottom: 20,
     borderRadius: 10,
   },
   input: {
@@ -139,29 +145,8 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 20,
-    paddingcenter: 10,
+    padding: 10,
     paddingLeft: 10,
     borderRadius: 10,
-  },
-  button: {
-    alignContent: "center",
-    backgroundColor: "#0782F9",
-    padding: 10,
-    margin: 5,
-    width: "80%",
-    borderRadius: 10,
-  },
-  buttonAlt: {
-    backgroundColor: "white",
-    borderColor: "#0782F9",
-    borderWidth: 1,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-  },
-  buttonAltText: {
-    color: "#0782F9",
-    fontWeight: "700",
   },
 });
