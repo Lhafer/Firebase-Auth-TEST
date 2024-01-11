@@ -1,7 +1,6 @@
-// Buttons.js
 import { StyleSheet, TouchableOpacity, Text } from "react-native";
-import React from "react";
 
+// Corrected export statements
 export const Button = ({ onPress, title }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
@@ -21,6 +20,7 @@ export const ButtonAlt = ({ onPress, title }) => {
   );
 };
 
+// Removed the export default statement
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#0782F9",

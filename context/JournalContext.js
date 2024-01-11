@@ -1,28 +1,35 @@
 // JournalContext.js
 import React, { createContext, useState, useContext } from "react";
 
-//create context element
+// Create context element
 const JournalContext = createContext();
 
-//constant to create the context
+// Constant to create the context
 const JournalProvider = ({ children }) => {
-  //entries hook
+  // Entries hook
   const [entries, setEntries] = useState([]);
-
-  //add entry
+  const [entCount, setEntCount] = useState(0);
+  // Add entry
   const addEntry = (newEntry) => {
     setEntries([...entries, newEntry]);
+    setEntCount(entCount + 1);
   };
 
   return (
-    //use context elemetn provider with desirec context
-    <JournalContext.Provider value={{ entries, addEntry }}>
+    // Use context element provider with desired context
+    <JournalContext.Provider value={{ addEntry, entries, entCount }}>
       {children}
     </JournalContext.Provider>
   );
 };
+
+// Corrected useJournal hook
 const useJournal = () => {
-  const { addEntry, entries } = useContext(JournalContext);
-  return { addEntry, entries };
+  const context = useContext(JournalContext);
+  if (!context) {
+    throw new Error("useJournal must be used within a JournalProvider");
+  }
+  return context;
 };
-export { useJournal, JournalProvider };
+
+export { useJournal, JournalProvider, JournalContext };

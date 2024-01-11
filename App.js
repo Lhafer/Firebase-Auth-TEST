@@ -4,38 +4,40 @@ import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthProvider } from "./context/AuthContext";
-import JournalScreen from "./screens/JournalScreen";
-import LoginScreen from "./screens/LoginScreen";
+import LoginScreen from "./screens/LoginScreen.js";
 import HomeScreen from "./screens/HomeScreen";
 import { JournalProvider } from "./context/JournalContext";
-
+import JournalScreen from "./screens/JournalScreen.js";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AuthProvider>
-        <JournalProvider>
+    <AuthProvider>
+      <JournalProvider>
+        <NavigationContainer>
           <Stack.Navigator>
-            {/*<Stack.Screen
+            <Stack.Screen
               name="Journal"
               component={JournalScreen}
               options={{ headerShown: false }}
-  />*/}
+              style={styles.container}
+            />
             <Stack.Screen
               name="Login"
               component={LoginScreen}
               options={{ headerShown: false }}
+              style={styles.container}
             />
             <Stack.Screen
               name="Home"
               component={HomeScreen}
               options={{ headerShown: false }}
+              style={styles.container}
             />
           </Stack.Navigator>
-        </JournalProvider>
-      </AuthProvider>
-    </NavigationContainer>
+        </NavigationContainer>
+      </JournalProvider>
+    </AuthProvider>
   );
 }
 

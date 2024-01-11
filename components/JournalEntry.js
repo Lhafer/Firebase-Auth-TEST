@@ -1,4 +1,3 @@
-import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 export const JournalEntry = ({ entry }) => {
@@ -25,6 +24,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+    width: "80%",
+    height: "90%",
   },
   date: {
     fontSize: 12,
