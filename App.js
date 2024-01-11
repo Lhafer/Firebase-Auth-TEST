@@ -3,9 +3,11 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { AuthProvider } from "./AuthContext";
+import { AuthProvider } from "./context/AuthContext";
+import JournalScreen from "./screens/JournalScreen";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
+import { JournalProvider } from "./context/JournalContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,20 +15,25 @@ export default function App() {
   return (
     <NavigationContainer>
       <AuthProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            style={styles.container}
-            options={{ headerShown: false }}
-            name="Login"
-            component={LoginScreen}
-          />
-          <Stack.Screen
-            style={styles.container}
-            options={{ headerShown: false }}
-            name="Home"
-            component={HomeScreen}
-          />
-        </Stack.Navigator>
+        <JournalProvider>
+          <Stack.Navigator>
+            {/*<Stack.Screen
+              name="Journal"
+              component={JournalScreen}
+              options={{ headerShown: false }}
+  />*/}
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </JournalProvider>
       </AuthProvider>
     </NavigationContainer>
   );

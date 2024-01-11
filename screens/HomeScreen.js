@@ -8,7 +8,7 @@ import {
 import { useState, React, useEffect } from "react";
 import { Button } from "../components/Buttons";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth, logout } from "../AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ const HomeScreen = () => {
     navigation.navigate("Login");
   };
 
-  const { user, setUser, isLoggedIn, setLogged } = useAuth();
+  const { user, setUser, isLoggedIn, setLogged, logout } = useAuth();
 
   return (
     <KeyboardAvoidingView style={styles.container}>

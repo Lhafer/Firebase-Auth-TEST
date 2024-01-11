@@ -11,7 +11,7 @@ import React from "react";
 import { auth } from "../firebase";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth, logout } from "../AuthContext";
+import { useAuth } from "../context/AuthContext";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
