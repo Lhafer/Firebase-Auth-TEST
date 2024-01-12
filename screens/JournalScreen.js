@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, View, Text } from "react-native";
+import { FlatList, StyleSheet, View, Text } from "react-native";
 import { JournalEntry } from "../components/JournalEntry";
 import { Button } from "../components/Buttons";
 import { useJournal } from "../context/JournalContext";
@@ -20,20 +20,24 @@ const JournalScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Button
-          title="Add Entry"
-          onPress={() => {
-            handleAddEntry();
-          }}
+    <View style={styles.outerContainerr}>
+      <Button
+        title="Add Entry"
+        onPress={() => {
+          handleAddEntry();
+        }}
+      />
+
+      {entries && entries.length > 0 ? (
+        <FlatList
+          contentContainerStyle={styles.container}
+          data={entries}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <JournalEntry entry={item} />}
         />
-        {entries && entries.length > 0 ? (
-          entries.map((item) => <JournalEntry key={item.id} entry={item} />)
-        ) : (
-          <Text> Add an entry and it will show up here.</Text>
-        )}
-      </ScrollView>
+      ) : (
+        <Text> Add an entry and it will show up here.</Text>
+      )}
     </View>
   );
 };
@@ -44,15 +48,16 @@ const styles = StyleSheet.create({
     width: "30%",
   },
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    width: "100vh",
+    height: "90vh",
     flex: 1,
   },
-  listContainer: {
-    height: "75%",
-  },
-  entryList: {
-    borderColor: "black",
-    borderWidth: 2,
+  outerContainer: {
+    width: "100vh",
+    height: "100vh",
+    flex: 1,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
