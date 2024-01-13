@@ -9,10 +9,17 @@ export const Button = ({ onPress, title }) => {
   );
 };
 
-export const ButtonAlt = ({ onPress, title }) => {
+export const ButtonAlt = ({ onPress, title, onFirstPress }) => {
+  const [presses, setPresses] = uesState(0);
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={() => {
+        if (presses < 1) {
+          onFirstPress();
+        }
+        onPress();
+        setPresses(presses + 1);
+      }}
       style={[styles.button, styles.buttonAlt]}
     >
       <Text style={styles.buttonAltText}>{title}</Text>

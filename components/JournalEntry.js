@@ -1,6 +1,8 @@
-import { View, Text, StyleSheet } from "react-native";
-
+import { TextInput, View, Text, StyleSheet } from "react-native";
+import { useState } from "react";
+import React from "react";
 export const JournalEntry = ({ entry }) => {
+  const [content, setContent] = useState("");
   // Check if entry is null or undefined
   if (!entry) {
     return (
@@ -14,18 +16,23 @@ export const JournalEntry = ({ entry }) => {
     <View style={styles.entryContainer}>
       <Text style={styles.date}>{entry.date}</Text>
       <Text style={styles.title}>{entry.title}</Text>
-      <Text style={styles.content}>{entry.content}</Text>
+      <TextInput
+        onChangeText={(e) => setContent(e)}
+        style={styles.content}
+        value={content}
+        placeholder="Write Here..."
+        multiline={true}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   entryContainer: {
+    flex: 1,
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-    width: "80%",
-    height: "90%",
   },
   date: {
     fontSize: 12,

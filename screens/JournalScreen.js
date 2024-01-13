@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FlatList, StyleSheet, View, Text } from "react-native";
 import { JournalEntry } from "../components/JournalEntry";
 import { Button } from "../components/Buttons";
@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 const JournalScreen = () => {
   const navigation = useNavigation();
   const { addEntry, entries } = useJournal();
+  const [marginTop, setMarginTop] = useState(0);
 
   const handleAddEntry = () => {
     const newEntry = {
@@ -20,20 +21,27 @@ const JournalScreen = () => {
   };
 
   return (
-    <View style={styles.outerContainerr}>
+    <View
+      id="outerContainer"
+      style={[styles.outerContainer, { marginTop: marginTop }]}
+    >
       <Button
         title="Add Entry"
         onPress={() => {
           handleAddEntry();
+          setMarginTop(20);
         }}
       />
 
       {entries && entries.length > 0 ? (
         <FlatList
-          contentContainerStyle={styles.container}
           data={entries}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <JournalEntry entry={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.innerContainer}>
+              <JournalEntry entry={item} />
+            </View>
+          )}
         />
       ) : (
         <Text> Add an entry and it will show up here.</Text>
@@ -43,21 +51,28 @@ const JournalScreen = () => {
 };
 
 export default JournalScreen;
+
 const styles = StyleSheet.create({
   buttonContainer: {
     width: "30%",
   },
-  container: {
-    width: "100vh",
-    height: "90vh",
-    flex: 1,
-  },
   outerContainer: {
-    width: "100vh",
-    height: "100vh",
     flex: 1,
-    alignContent: "center",
     alignItems: "center",
     justifyContent: "center",
+    height: "100%",
+    width: "100%",
+    borderColor: "Black",
+    borderWidth: 1,
+  },
+  innerContainer: {
+    flex: 1,
+    height: "100%", // Each item takes up the entire height of the screen
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e0e0e0", // Optional background color
+    borderBottomWidth: 1,
+    borderColor: "Black",
+    borderWidth: 1,
   },
 });
