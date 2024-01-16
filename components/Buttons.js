@@ -1,5 +1,4 @@
 import { StyleSheet, TouchableOpacity, Text } from "react-native";
-
 // Corrected export statements
 export const Button = ({ onPress, title }) => {
   return (
@@ -9,17 +8,10 @@ export const Button = ({ onPress, title }) => {
   );
 };
 
-export const ButtonAlt = ({ onPress, title, onFirstPress }) => {
-  const [presses, setPresses] = uesState(0);
+export const ButtonAlt = ({ onPress, title }) => {
   return (
     <TouchableOpacity
-      onPress={() => {
-        if (presses < 1) {
-          onFirstPress();
-        }
-        onPress();
-        setPresses(presses + 1);
-      }}
+      onPress={onPress}
       style={[styles.button, styles.buttonAlt]}
     >
       <Text style={styles.buttonAltText}>{title}</Text>

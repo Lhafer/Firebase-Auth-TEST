@@ -17,22 +17,19 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
-              name="Journal"
-              component={JournalScreen}
-              options={{ headerShown: false }}
-              style={styles.container}
-            />
-            <Stack.Screen
               name="Login"
               component={LoginScreen}
               options={{ headerShown: false }}
-              style={styles.container}
+            />
+            <Stack.Screen
+              name="Journal"
+              component={JournalScreen}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Home"
               component={HomeScreen}
               options={{ headerShown: false }}
-              style={styles.container}
             />
           </Stack.Navigator>
         </NavigationContainer>

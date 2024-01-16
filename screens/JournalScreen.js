@@ -32,7 +32,7 @@ const JournalScreen = () => {
           setMarginTop(20);
         }}
       />
-
+      <Button title="Go Back" onPress={navigation.goBack} />
       {entries && entries.length > 0 ? (
         <FlatList
           data={entries}

@@ -101,6 +101,12 @@ const LoginScreen = () => {
             }}
             title="Register"
           />
+          <Button
+            onPress={() => {
+              navigation.navigate("Journal");
+            }}
+            title="Go To Your Journal"
+          />
         </View>
       </View>
     </KeyboardAvoidingView>
