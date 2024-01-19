@@ -1,6 +1,6 @@
 // App.js
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthProvider } from "./context/AuthContext";
@@ -33,6 +33,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
+        <StatusBar></StatusBar>
       </JournalProvider>
     </AuthProvider>
   );

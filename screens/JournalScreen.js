@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, StyleSheet, View, Text } from "react-native";
+import { FlatList, SafeAreaView, StyleSheet, View, Text } from "react-native";
 import { JournalEntry } from "../components/JournalEntry";
 import { Button } from "../components/Buttons";
 import { useJournal } from "../context/JournalContext";
@@ -15,13 +15,13 @@ const JournalScreen = () => {
       id: entries.length + 1,
       date: new Date().toLocaleDateString(),
       title: "New Entry",
-      content: "Write your content here...",
+      pages: [" "],
     };
     addEntry(newEntry);
   };
 
   return (
-    <View
+    <SafeAreaView
       id="outerContainer"
       style={[styles.outerContainer, { marginTop: marginTop }]}
     >
@@ -46,7 +46,7 @@ const JournalScreen = () => {
       ) : (
         <Text> Add an entry and it will show up here.</Text>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

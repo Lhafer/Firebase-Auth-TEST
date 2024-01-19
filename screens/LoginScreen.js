@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TextInput,
+  SafeAreaView,
   TouchableOpacity,
 } from "react-native";
 import { Button, ButtonAlt } from "../components/Buttons";
@@ -69,47 +70,52 @@ const LoginScreen = () => {
     }
   };
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.temp}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-            secureTextEntry
-          />
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View style={styles.temp}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              secureTextEntry
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              onPress={() => {
+                handleLogin();
+              }}
+              title="Login"
+            />
+            <ButtonAlt
+              onPress={() => {
+                handleSignUp();
+                setEmail("");
+                setPassword("");
+              }}
+              title="Register"
+            />
+            <Button
+              onPress={() => {
+                navigation.navigate("Journal");
+              }}
+              title="Go To Your Journal"
+            />
+          </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={() => {
-              handleLogin();
-            }}
-            title="Login"
-          />
-          <ButtonAlt
-            onPress={() => {
-              handleSignUp();
-              setEmail("");
-              setPassword("");
-            }}
-            title="Register"
-          />
-          <Button
-            onPress={() => {
-              navigation.navigate("Journal");
-            }}
-            title="Go To Your Journal"
-          />
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

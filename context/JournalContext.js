@@ -14,10 +14,17 @@ const JournalProvider = ({ children }) => {
     setEntries([...entries, newEntry]);
     setEntCount(entCount + 1);
   };
+  const updateEntry = (index, updatedEntry) => {
+    const updatedEntries = [...entries];
+    updatedEntries[index] = updatedEntry;
+    setEntries(updatedEntries);
+  };
 
   return (
     // Use context element provider with desired context
-    <JournalContext.Provider value={{ addEntry, entries, entCount }}>
+    <JournalContext.Provider
+      value={{ addEntry, entries, entCount, updateEntry }}
+    >
       {children}
     </JournalContext.Provider>
   );
