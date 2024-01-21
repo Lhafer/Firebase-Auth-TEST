@@ -1,18 +1,23 @@
 // JournalContext.js
 import React, { createContext, useState, useContext } from "react";
-
+import { useAuth } from "./AuthContext";
 // Create context element
 const JournalContext = createContext();
 
 // Constant to create the context
 const JournalProvider = ({ children }) => {
-  // Entries hook
+  const { user, userDB } = useAuth();
   const [entries, setEntries] = useState([]);
   const [entCount, setEntCount] = useState(0);
   // Add entry
-  const addEntry = (newEntry) => {
+  const addEntry = async (newEntry) => {
     setEntries([...entries, newEntry]);
     setEntCount(entCount + 1);
+    try {
+      await userDB.doc(entCount).set(newEntry);
+    } catch (e) {
+      console.log(e);
+    }
   };
   const updateEntry = (index, updatedEntry) => {
     const updatedEntries = [...entries];

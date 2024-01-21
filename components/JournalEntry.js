@@ -3,7 +3,6 @@ import { TextInput, View, Text, StyleSheet } from "react-native";
 import { useJournal } from "../context/JournalContext";
 
 export const JournalEntry = ({ entry }) => {
-  const { updateEntry } = useJournal();
   const Pages = ({ numberOfTimes }) => {
     const renderComponents = () => {
       const components = [];
