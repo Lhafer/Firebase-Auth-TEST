@@ -1,6 +1,8 @@
 // JournalContext.js
 import React, { createContext, useState, useContext } from "react";
 import { useAuth } from "./AuthContext";
+import { db } from "../firebase";
+
 // Create context element
 const JournalContext = createContext();
 
@@ -14,7 +16,7 @@ const JournalProvider = ({ children }) => {
     setEntries([...entries, newEntry]);
     setEntCount(entCount + 1);
     try {
-      await userDB.doc(entCount).set(newEntry);
+      await db.collection(user.email).doc(entCount).set(newEntry);
     } catch (e) {
       console.log(e);
     }
