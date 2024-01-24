@@ -1,12 +1,15 @@
 // AuthContext.js
 import { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "../firebase";
-
+import { auth, db } from "../firebase";
+import { collection } from "firebase/firestore";
+import { getDocs } from "firebase/firestore";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setLogged] = useState(false);
+  const [colRef, setRef] = useState();
+  const [entries, setEntries] = useState();
   const logout = async () => {
     try {
       await auth.signOut();
@@ -15,20 +18,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        setLogged(true);
-        setUser(authUser);
-      } else {
-        setLogged(false);
-        setUser(null);
-      }
-    });
+    if (user) {
+      const newColRef = collection(db, user.email);
+      setRef(newColRef);
 
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+      const fetchData = async () => {
+        try {
+          const querySnapshot = await getDocs(newColRef);
+          setEntries(querySnapshot.docs.map((doc) => doc.data()));
+          console.log(entries);
+        } catch (e) {
+          console.log("Failed to get entries: " + e);
+        }
+      };
+
+      fetchData();
+    }
+  }, [user]);
 
   const value = {
     user,
@@ -36,6 +42,9 @@ export const AuthProvider = ({ children }) => {
     setUser,
     setLogged,
     logout,
+    colRef,
+    entries,
+    setEntries,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

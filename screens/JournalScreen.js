@@ -4,10 +4,10 @@ import { JournalEntry } from "../components/JournalEntry";
 import { Button } from "../components/Buttons";
 import { useJournal } from "../context/JournalContext";
 import { useNavigation } from "@react-navigation/native";
-
+import { useAuth } from "../context/AuthContext";
 const JournalScreen = () => {
   const navigation = useNavigation();
-  const { addEntry, entries } = useJournal();
+  const { addEntry, entries, setEntries } = useJournal();
   const [marginTop, setMarginTop] = useState(0);
 
   const handleAddEntry = () => {

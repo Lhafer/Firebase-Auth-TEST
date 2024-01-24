@@ -1,22 +1,20 @@
 // JournalContext.js
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useAuth } from "./AuthContext";
-import { db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 // Create context element
 const JournalContext = createContext();
 
 // Constant to create the context
 const JournalProvider = ({ children }) => {
-  const { user, userDB } = useAuth();
-  const [entries, setEntries] = useState([]);
+  const { user, colRef, entries, setEntries } = useAuth();
   const [entCount, setEntCount] = useState(0);
-  // Add entry
+
   const addEntry = async (newEntry) => {
     setEntries([...entries, newEntry]);
-    setEntCount(entCount + 1);
     try {
-      await db.collection(user.email).doc(entCount).set(newEntry);
+      await setDoc(doc(colRef, "Entry:" + entries.length + 1), newEntry);
     } catch (e) {
       console.log(e);
     }
@@ -30,7 +28,15 @@ const JournalProvider = ({ children }) => {
   return (
     // Use context element provider with desired context
     <JournalContext.Provider
-      value={{ addEntry, entries, entCount, updateEntry }}
+      value={{
+        addEntry,
+        setEntries,
+        setEntCount,
+        entries,
+        setEntries,
+        entCount,
+        updateEntry,
+      }}
     >
       {children}
     </JournalContext.Provider>

@@ -13,24 +13,28 @@ import { auth } from "../firebase";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../context/AuthContext";
+
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { useJournal } from "../context/JournalContext";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const { user, setUser, isLoggedIn, setLogged } = useAuth();
+  const { setEntries, colRef, entries } = useJournal();
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user && !loading) {
         setLogged(true);
         setUser(user);
         setEmail("");
         setPassword("");
+
         navigation.navigate("Home");
       } else {
         console.log("loading");
