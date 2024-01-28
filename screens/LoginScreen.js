@@ -25,7 +25,6 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const { user, setUser, isLoggedIn, setLogged } = useAuth();
-  const { setEntries, colRef, entries } = useJournal();
   useEffect(() => {
     setLoading(true);
     const unsubscribe = auth.onAuthStateChanged(async (user) => {

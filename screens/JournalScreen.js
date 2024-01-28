@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, View, Text } from "react-native";
 import { JournalEntry } from "../components/JournalEntry";
-import { Button } from "../components/Buttons";
+import { Button, ButtonAlt } from "../components/Buttons";
 import { useJournal } from "../context/JournalContext";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../context/AuthContext";
@@ -32,7 +32,7 @@ const JournalScreen = () => {
           setMarginTop(20);
         }}
       />
-      <Button title="Go Back" onPress={navigation.goBack} />
+      <ButtonAlt title="Go Back" onPress={navigation.goBack} />
       {entries && entries.length > 0 ? (
         <FlatList
           data={entries}

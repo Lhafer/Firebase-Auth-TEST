@@ -1,7 +1,7 @@
 // JournalContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useAuth } from "./AuthContext";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 // Create context element
 const JournalContext = createContext();
@@ -14,15 +14,20 @@ const JournalProvider = ({ children }) => {
   const addEntry = async (newEntry) => {
     setEntries([...entries, newEntry]);
     try {
-      await setDoc(doc(colRef, "Entry:" + entries.length + 1), newEntry);
+      await setDoc(doc(colRef, "Entry:" + (entries.length + 1)), newEntry);
     } catch (e) {
       console.log(e);
     }
   };
-  const updateEntry = (index, updatedEntry) => {
-    const updatedEntries = [...entries];
-    updatedEntries[index] = updatedEntry;
-    setEntries(updatedEntries);
+  const updateEntry = async (index, updatedEntry) => {
+    try {
+      // Update the entry in the Firestore database
+      await updateDoc(doc(colRef, "Entry:" + (index + 1)), {
+        pages: updatedEntry.pages,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

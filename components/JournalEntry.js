@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, View, Text, StyleSheet } from "react-native";
+import {
+  TextInput,
+  View,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useJournal } from "../context/JournalContext";
 
 export const JournalEntry = ({ entry }) => {
@@ -9,12 +16,7 @@ export const JournalEntry = ({ entry }) => {
 
       for (let i = 0; i < numberOfTimes; i++) {
         components.push(
-          <Page
-            content={entry.pages[i]}
-            pgNumber={i + 1}
-            key={i}
-            updateContent={(newContent) => updateContent(i, newContent)}
-          />
+          <Page content={entry.pages[i]} pgNumber={i + 1} key={i} />
         );
       }
 
@@ -26,20 +28,43 @@ export const JournalEntry = ({ entry }) => {
 
   const Page = ({ pgNumber }) => {
     const [content, setContent] = useState("");
+    const { updateEntry } = useJournal();
+
+    useEffect(() => {
+      setContent(entry.pages[pgNumber - 1]);
+    }, []);
+
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        updateContent(pgNumber - 1, content);
+      }, 10000);
+
+      return () => clearInterval(intervalId);
+    }, [content, pgNumber, updateContent]);
+
+    const updateContent = (index, newContent) => {
+      entry.pages[index] = newContent;
+      updateEntry(entry.id - 1, entry);
+    };
 
     return (
       <View>
-        <TextInput
-          onChangeText={(e) => {
-            setContent(e);
-          }}
-          value={content}
-          style={styles.content}
-          placeholder="Write Here..."
-          multiline={true}
-          numberOfLines={30}
-          textAlignVertical="top"
-        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+        >
+          <TextInput
+            onChangeText={(e) => {
+              setContent(e);
+            }}
+            value={content}
+            style={styles.content}
+            placeholder="Write Here..."
+            multiline={true}
+            numberOfLines={30}
+            textAlignVertical="top"
+          />
+        </KeyboardAvoidingView>
         <View
           style={{
             alignItems: "center",
